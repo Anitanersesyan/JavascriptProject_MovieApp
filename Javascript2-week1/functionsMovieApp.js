@@ -39,7 +39,7 @@ function displayMoviesGrid() {
     const minY = Math.min(...movies.map(m => m.coordinates.y));
     const maxY = Math.max(...movies.map(m => m.coordinates.y));
 
-    //Seting grid size
+    //Selecting grid size
     const gridWidth = maxX - minX + 1;
     const gridHeight = maxY - minY + 1;
 
