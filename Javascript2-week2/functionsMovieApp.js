@@ -308,9 +308,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     };
     stars.forEach(star => {
-        star.addEventListener("click", function () { //!cant change this function to an arrow function, because when I do the starts dont work
+        star.addEventListener("click", () => {
             //When a star is clicked, get its rating value
-            selectedRating = this.dataset.value;
+            selectedRating = event.target.dataset.value;
             updateStarHighlight(selectedRating);
         });
     });
