@@ -4,13 +4,13 @@ import { allComments, addCommentToStorage } from './commentsFunctions.js';
 /* FILTERS */ // (UPDATED JS2 WK2) - Added filters section
 
 // Filters movies by genre
-function filterMoviesByGenre(genre) {
+const filterMoviesByGenre = (genre) => {
     const filteredMovies = movies.filter(movie => movie.genres.includes(genre));
     displayMoviesGrid(filteredMovies);
 };
 
 // Genre filters
-function setupGenreFilters() {
+const setupGenreFilters = () => {
     const genreFiltersContainer = document.getElementById('genreFilters');
 
     // Use reduce to collect unique genres in a Set
@@ -32,13 +32,13 @@ function setupGenreFilters() {
 };
 
 // Displays trending movies
-function displayTrendingMovies() {
+const displayTrendingMovies = () => {
     const trendingMovies = movies.filter(movie => movie.trending);
     displayMoviesGrid(trendingMovies);
 };
 
 // Displays all the movies
-function displayAllMovies() {
+const displayAllMovies = () => {
     displayMoviesGrid(movies);
 };
 
@@ -50,11 +50,11 @@ document.getElementById('trendingMovies').addEventListener('click', displayTrend
 setupGenreFilters();
 
 /* DROPDOWN MENU*/
-function setupDropdown() {
+const setupDropdown = () => {
     let dropdownButton = document.querySelector(".dropdownContent");
     let dropdownMenu = document.querySelector(".dropdownMenu");
 
-    dropdownButton.addEventListener("click", function () {
+    dropdownButton.addEventListener("click", () => {
         if (dropdownMenu.style.display === "block") {
             dropdownMenu.style.display = "none"; // Hide the menu
         } else {
@@ -63,7 +63,7 @@ function setupDropdown() {
     });
 
     // If the user clicks anywhere outside the dropdown, close the dropdown 
-    document.addEventListener("click", function (event) {
+    document.addEventListener("click", (event) => {
         if (!dropdownButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
             dropdownMenu.style.display = "none";
         }
@@ -80,7 +80,7 @@ document.querySelector(".searchText").addEventListener("input", (event) => {
 });
 
 /* MOVIES GRID */ // (UPDATED JS2 WK2) - Updated to handle filtered/searched movies
-function displayMoviesGrid(searchedMovies = movies) {
+const displayMoviesGrid = (searchedMovies = movies) => {
     const cardContainer = document.getElementById('card-container');
     cardContainer.innerHTML = ''; // Clear the current grid
 
@@ -155,7 +155,7 @@ function displayMoviesGrid(searchedMovies = movies) {
 
 /* SCREEN DRAG FUNCTIONS*/
 
-function screenDrag() {
+const screenDrag = () => {
     const container = document.getElementById('card-container');
     let isDragging = false;
     let startX, startY;         // Position of grab
@@ -185,20 +185,20 @@ function screenDrag() {
 }; 
 
 //! Grouped all the Details functions under movieDetailsPanel()
-function movieDetailsPanel() {
+const movieDetailsPanel = () => {
     const movieDetails = document.getElementById('movie-details');
 
    /* SLIDING WINDOW */
-   function toggleDetails(movie) {
+   const toggleDetails = (movie) => {
     if (movieDetails.classList.contains("show")) {
         closeDetails(); // Close if already open
     } else {
         openDetails(movie, movie.id);
     }
-}
+};
 
    // Open the sliding window
-    function openDetails(movie, currentMovieId) {
+    const openDetails = (movie, currentMovieId) => {
         movieDetails.classList.add("show");
         document.getElementById("details-title").textContent = movie.title;
         document.getElementById("details-year").textContent = `${movie.movieYear}`;
@@ -232,7 +232,7 @@ const commentInput = commentForm.querySelector('textarea');
 const commentDisplay = commentsSection.querySelector('#comment-display');
 
 // Function to display comments for a given movie ID
-function displayComments(movieId) {
+const displayComments = (movieId) => {
     // Filter comments by movie ID and create HTML structure for comments
     const comments = allComments.filter((comment) => comment.movieId === movieId);
     const commentHTML = comments.map((comment) => `
@@ -270,7 +270,7 @@ commentForm.addEventListener('submit', (e) => {
     }
 
     /* Close the details window */
-    function closeDetails() {
+    const closeDetails = () => {
         movieDetails.classList.remove("show");
     }
 
@@ -293,7 +293,7 @@ commentForm.addEventListener('submit', (e) => {
 }
 
 /* STAR RATING */
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
     let stars = document.querySelectorAll(".star"); //Get all the star elements 
     let selectedRating = 0; // Keeps track of the selected rating 
 
@@ -308,7 +308,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     };
     stars.forEach(star => {
-        star.addEventListener("click", function () {
+        star.addEventListener("click", function () { //!cant change this function to an arrow function, because when I do the starts dont work
             //When a star is clicked, get its rating value
             selectedRating = this.dataset.value;
             updateStarHighlight(selectedRating);
@@ -317,7 +317,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     //Reset the star rating for a new movie card 
     let cardContainer = document.getElementById("card-container");
-    cardContainer.addEventListener("click", function (event) {
+    cardContainer.addEventListener("click", (event) => {
         let clickedCard = event.target.closest(".card"); //Check if the clicked element is inside a movie card 
         if (clickedCard) {
             selectedRating = 0;
