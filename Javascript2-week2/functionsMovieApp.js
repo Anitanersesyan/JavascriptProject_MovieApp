@@ -67,18 +67,10 @@ function setupDropdown() {
 setupDropdown();
 
 /* SEARCH BAR */ // (UPDATED JS2 WK2) - Added search bar functionality
-function searchMovies(searchText) {
-    return movies.filter(movie => 
-        movie.title.toLowerCase().includes(searchText.toLowerCase())
-    );
-};
-
 document.querySelector(".searchText").addEventListener("input", (event) => {
-    const searchText = event.target.value.trim();
-    const searchedMovies = searchMovies(searchText);
-    displayMoviesGrid(searchedMovies);
-
-
+    displayMoviesGrid(movies.filter(movie =>
+        movie.title.toLowerCase().includes(event.target.value.trim().toLowerCase())
+    ));
 });
 
 /* MOVIES GRID */ // (UPDATED JS2 WK2) - Updated to handle filtered/searched movies
