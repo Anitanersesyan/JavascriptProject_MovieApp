@@ -7,17 +7,23 @@ import { allComments, addCommentToStorage } from './commentsFunctions.js';
 function filterMoviesByGenre(genre) {
     const filteredMovies = movies.filter(movie => movie.genres.includes(genre));
     displayMoviesGrid(filteredMovies);
-}; 
-    // Genre filters
+};
+
+// Genre filters
 function setupGenreFilters() {
     const genreFiltersContainer = document.getElementById('genreFilters');
-    const allGenres = [...new Set(movies.flatMap(movie => movie.genres))]; // Get unique genres
 
-    // Sorts genres alphabetically
-    allGenres.sort((a, b) => a.localeCompare(b));
+    // Use reduce to collect unique genres in a Set
+    const allGenres = movies.reduce((genres, movie) => {
+        movie.genres.forEach(genre => genres.add(genre));
+        return genres;
+    }, new Set());
 
+    // Convert Set to an array and sort it alphabetically
+    const sortedGenres = [...allGenres].sort((a, b) => a.localeCompare(b));
 
-    allGenres.forEach(genre => {
+    // Create buttons for each genre
+    sortedGenres.forEach(genre => {
         const button = document.createElement('button');
         button.innerText = genre;
         button.onclick = () => filterMoviesByGenre(genre);
