@@ -1,33 +1,27 @@
 import { movies } from "./moviesList.js";
 import { allComments, addCommentToStorage } from './commentsFunctions.js';
 
-/* FILTERS */ // (UPDATED JS2 WK2) - Added filters section
+/* FILTERS */
 
 // Filters movies by genre
-const filterMoviesByGenre = (genre)  => {
+const filterMoviesByGenre = (genre) => {
     const filteredMovies = movies.filter(movie => movie.genres.includes(genre));
     displayMoviesGrid(filteredMovies);
-};
+}; 
 
 // Genre filters
 const setupGenreFilters = () => {
     const genreFiltersContainer = document.getElementById('genreFilters');
+    const allGenres = [...new Set(movies.flatMap(movie => movie.genres))]; // Get unique genres
 
-    // Use reduce to collect unique genres in a Set
-    const allGenres = movies.reduce((genres, movie) => {
-        movie.genres.forEach(genre => genres.add(genre));
-        return genres;
-    }, new Set());
+    // Sorts genres alphabetically
+    allGenres.sort((a, b) => a.localeCompare(b));
 
-    // Convert Set to an array and sort it alphabetically
-    const sortedGenres = [...allGenres].sort((a, b) => a.localeCompare(b));
-
-    // Create buttons for each genre
-    sortedGenres.forEach(genre => {
-        const timerButton = document.createElement('timerButton');
-        timerButton.innerText = genre;
-        timerButton.onclick = () => filterMoviesByGenre(genre);
-        genreFiltersContainer.appendChild(timerButton);
+    allGenres.forEach(genre => {
+        const button = document.createElement('button');
+        button.innerText = genre;
+        button.onclick = () => filterMoviesByGenre(genre);
+        genreFiltersContainer.appendChild(button);
     });
 };
 
@@ -38,7 +32,7 @@ const displayTrendingMovies = () => {
 };
 
 // Displays all the movies
-const displayAllMovies = () => {
+const displayAllMovies =() => {
     displayMoviesGrid(movies);
 };
 
@@ -49,12 +43,12 @@ document.getElementById('trendingMovies').addEventListener('click', displayTrend
 // Initialize genre filters
 setupGenreFilters();
 
-/* DROPDOWN MENU*/
+/* DROPDOWN MENU*/ 
 const setupDropdown = () => {
     let dropdownButton = document.querySelector(".dropdownContent");
     let dropdownMenu = document.querySelector(".dropdownMenu");
 
-    dropdownButton.addEventListener("click", () => {
+    dropdownButton.addEventListener("click", ()  => {
         if (dropdownMenu.style.display === "block") {
             dropdownMenu.style.display = "none"; // Hide the menu
         } else {
@@ -63,7 +57,7 @@ const setupDropdown = () => {
     });
 
     // If the user clicks anywhere outside the dropdown, close the dropdown 
-    document.addEventListener("click", (event) => {
+    document.addEventListener("click", function (event) {
         if (!dropdownButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
             dropdownMenu.style.display = "none";
         }
