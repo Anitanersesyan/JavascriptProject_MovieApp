@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="stylesMovieApp.css" />
+    <title>Movie Application</title>
+  </head>
+  <body>
+
+    <!-- Navigation Bar -->
+    <nav class="navigationBar">
+      <div class="appName">CineVerse</div>
+      <div class="menu">
+        <button id="allMovies">Movies</button>
+        <button id="trendingMovies">Trending</button>
+        <div class="dropdown">
+          <button class="dropdownContent">Genres</button>
+          <div class="dropdownMenu" id="genreFilters">
+            <!-- Genre buttons will be dynamically shown here  (UPDATED JS2 WK2)-->
+          </div>
+        </div>
+      </div>
+
+      <div class="search">
+        <input
+          type="text"
+          class="searchText"
+          placeholder="Search for a movie..."
+        />
+        <span class="searchIcon"
+          ><img
+            width="24"
+            height="24"
+            src="https://img.icons8.com/forma-thin/24/search.png"
+            alt="search"
+        /></span>
+      </div>
+
+      <!-- Timers (UPDATED JS2 WK3) --> 
+
+      <div class="timers">
+      <div id="page-time">
+        <span id="page-time-title">Time on CineVerse</span>
+        <span id="page-time-time">00:00</span>
+      </div>
+
+      <div id="pick-a-movie">
+        <span id ="pick-a-movie-title">Pick a movie</span>
+        <span id="pick-a-movie-time">00:00</span>
+        <input type="number" id="pick-a-movie-time-input" placeholder="min" min="1" />
+        <button id="start-pick-timer">Start</button>
+      </div>
+    </div>
+
+    </nav>
+
+    <!-- Movies Grid -->
+    <div id="card-container"></div>
+
+    <!-- Sliding Movie Details -->
+    <div id="movie-details" class="movie-details">
+      <button class="close-btn" onclick="closeDetails()">
+        <img
+          width="30"
+          height="30"
+          src="https://img.icons8.com/metro/100/FFFFFF/multiply.png"
+          alt="close-button"
+        />
+      </button>
+      <img id="details-poster" src="" alt="Movie Poster" />
+      <h2 id="details-title"></h2>
+      <p id="details-year"></p>
+
+      <!-- Star Rating -->
+      <div id="star-rating" class="rating">
+        <span class="star" data-value="1">&#9733;</span>
+        <span class="star" data-value="2">&#9733;</span>
+        <span class="star" data-value="3">&#9733;</span>
+        <span class="star" data-value="4">&#9733;</span>
+        <span class="star" data-value="5">&#9733;</span>
+      </div>
+
+      <p id="details-description"></p>
+      <p id="details-genre"></p>
+      <p id="details-director"></p>
+      <p id="details-cast"></p>
+    </div>
+
+    <script defer type="module" src="functionsMovieApp.js"></script>
+    <script defer type="module" src="commentsFunctions.js"></script>
+  </body>
+</html>
