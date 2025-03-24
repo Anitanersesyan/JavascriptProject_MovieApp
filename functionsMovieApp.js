@@ -1,60 +1,86 @@
-import { movies } from "./moviesList.js";
 import { allComments, addCommentToStorage } from './commentsFunctions.js';
 
-/* FILTERS */ // (UPDATED JS2 WK2) - Added filters section
+/* FETCH MOVIES */ // UPDATED JS3 WK1
+let movies = null;
+const fetchMoviesData = () => {
+    fetch("https://raw.githubusercontent.com/Anitanersesyan/Anitanersesyan.github.io/main/movieApp_data/movies.json")
+      .then(response => response.json())
+      .then(moviesData => {
+        movies = moviesData;
+        initializeMoviesFunctions();
+      })
+      .catch(error => {
+        console.error('Error loading movies:', error);
+        alert('Error loading movies. Please try again later.');
+      });
+  };
 
+/* FILTERS */
 // Filters movies by genre
-const filterMoviesByGenre = (genre)  => {
+const filterMoviesByGenre = (genre) => {
     const filteredMovies = movies.filter(movie => movie.genres.includes(genre));
     displayMoviesGrid(filteredMovies);
-};
+}; 
 
 // Genre filters
 const setupGenreFilters = () => {
     const genreFiltersContainer = document.getElementById('genreFilters');
+    const allGenres = [...new Set(movies.flatMap(movie => movie.genres))]; // Get unique genres
 
-    // Use reduce to collect unique genres in a Set
-    const allGenres = movies.reduce((genres, movie) => {
-        movie.genres.forEach(genre => genres.add(genre));
-        return genres;
-    }, new Set());
+    // Sorts genres alphabetically
+    allGenres.sort((a, b) => a.localeCompare(b));
 
-    // Convert Set to an array and sort it alphabetically
-    const sortedGenres = [...allGenres].sort((a, b) => a.localeCompare(b));
-
-    // Create buttons for each genre
-    sortedGenres.forEach(genre => {
-        const timerButton = document.createElement('timerButton');
-        timerButton.innerText = genre;
-        timerButton.onclick = () => filterMoviesByGenre(genre);
-        genreFiltersContainer.appendChild(timerButton);
+    allGenres.forEach(genre => {
+        const button = document.createElement('button');
+        button.innerText = genre;
+        button.onclick = () => filterMoviesByGenre(genre);
+        genreFiltersContainer.appendChild(button);
     });
 };
 
 // Displays trending movies
 const displayTrendingMovies = () => {
+    if (!movies) return; // Safety check
     const trendingMovies = movies.filter(movie => movie.trending);
+    if (trendingMovies.length === 0) {
+      alert("No trending movies found!");
+      return;
+    }
     displayMoviesGrid(trendingMovies);
-};
+  };
 
 // Displays all the movies
-const displayAllMovies = () => {
+const displayAllMovies =() => {
     displayMoviesGrid(movies);
 };
 
-// Event listeners for the buttons
-document.getElementById('allMovies').addEventListener('click', displayAllMovies);
-document.getElementById('trendingMovies').addEventListener('click', displayTrendingMovies);
+// Initialize genre filters - UPDATED JS3 WK1
+const initializeMoviesFunctions = () => {
+    setupGenreFilters();
+    displayMoviesGrid();
+    screenDrag();
+    setupDropdown();
 
-// Initialize genre filters
-setupGenreFilters();
+    // Event listeners
+    document.getElementById('allMovies').addEventListener('click', displayAllMovies);
+    document.getElementById('trendingMovies').addEventListener('click', displayTrendingMovies);
+  
+    // Search functionality
+    document.querySelector(".searchText").addEventListener("input", (event) => {
+      displayMoviesGrid(
+        movies.filter((movie) =>
+          movie.title.toLowerCase().includes(event.target.value.trim().toLowerCase())
+        )
+      );
+    });
+  };
 
-/* DROPDOWN MENU*/
+/* DROPDOWN MENU*/ 
 const setupDropdown = () => {
     let dropdownButton = document.querySelector(".dropdownContent");
     let dropdownMenu = document.querySelector(".dropdownMenu");
 
-    dropdownButton.addEventListener("click", () => {
+    dropdownButton.addEventListener("click", ()  => {
         if (dropdownMenu.style.display === "block") {
             dropdownMenu.style.display = "none"; // Hide the menu
         } else {
@@ -63,24 +89,14 @@ const setupDropdown = () => {
     });
 
     // If the user clicks anywhere outside the dropdown, close the dropdown 
-    document.addEventListener("click", (event) => {
+    document.addEventListener("click", function (event) {
         if (!dropdownButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
             dropdownMenu.style.display = "none";
         }
     });
 };
 
-setupDropdown();
-
-/* SEARCH BAR */ // (UPDATED JS2 WK2) - Added search bar functionality
-document.querySelector(".searchText").addEventListener("input", (event) => {
-    displayMoviesGrid(movies.filter(movie =>
-        movie.title.toLowerCase().includes(event.target.value.trim().toLowerCase())
-    ));
-});
-
-
-/* MOVIES GRID */ // (UPDATED JS2 WK2) - Updated to handle filtered/searched movies
+/* MOVIES GRID */ 
 const displayMoviesGrid = (searchedMovies = movies) => {
     const cardContainer = document.getElementById('card-container');
     cardContainer.innerHTML = ''; // Clear the current grid
@@ -155,7 +171,6 @@ const displayMoviesGrid = (searchedMovies = movies) => {
 };
 
 /* SCREEN DRAG FUNCTIONS*/
-
 const screenDrag= () => {
     const container = document.getElementById('card-container');
     let isDragging = false;
@@ -406,5 +421,4 @@ const updatePickTimerDisplay = () => {
 };
 
 
-displayMoviesGrid();
-screenDrag();
+fetchMoviesData(); // UPDATED JS3 WK1
