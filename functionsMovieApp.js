@@ -1,8 +1,21 @@
-import { movies } from "./moviesList.js";
 import { allComments, addCommentToStorage } from './commentsFunctions.js';
 
-/* FILTERS */
+/* FETCH MOVIES */ // UPDATED JS3 WK1
+let movies = null;
+const fetchMoviesData = () => {
+    fetch("https://raw.githubusercontent.com/Anitanersesyan/Anitanersesyan.github.io/main/movieApp_data/movies.json")
+      .then(response => response.json())
+      .then(moviesData => {
+        movies = moviesData;
+        initializeMoviesFunctions();
+      })
+      .catch(error => {
+        console.error('Error loading movies:', error);
+        alert('Error loading movies. Please try again later.');
+      });
+  };
 
+/* FILTERS */
 // Filters movies by genre
 const filterMoviesByGenre = (genre) => {
     const filteredMovies = movies.filter(movie => movie.genres.includes(genre));
@@ -27,21 +40,40 @@ const setupGenreFilters = () => {
 
 // Displays trending movies
 const displayTrendingMovies = () => {
+    if (!movies) return; // Safety check
     const trendingMovies = movies.filter(movie => movie.trending);
+    if (trendingMovies.length === 0) {
+      alert("No trending movies found!");
+      return;
+    }
     displayMoviesGrid(trendingMovies);
-};
+  };
 
 // Displays all the movies
 const displayAllMovies =() => {
     displayMoviesGrid(movies);
 };
 
-// Event listeners for the buttons
-document.getElementById('allMovies').addEventListener('click', displayAllMovies);
-document.getElementById('trendingMovies').addEventListener('click', displayTrendingMovies);
+// Initialize genre filters - UPDATED JS3 WK1
+const initializeMoviesFunctions = () => {
+    setupGenreFilters();
+    displayMoviesGrid();
+    screenDrag();
+    setupDropdown();
 
-// Initialize genre filters
-setupGenreFilters();
+    // Event listeners
+    document.getElementById('allMovies').addEventListener('click', displayAllMovies);
+    document.getElementById('trendingMovies').addEventListener('click', displayTrendingMovies);
+  
+    // Search functionality
+    document.querySelector(".searchText").addEventListener("input", (event) => {
+      displayMoviesGrid(
+        movies.filter((movie) =>
+          movie.title.toLowerCase().includes(event.target.value.trim().toLowerCase())
+        )
+      );
+    });
+  };
 
 /* DROPDOWN MENU*/ 
 const setupDropdown = () => {
@@ -64,17 +96,7 @@ const setupDropdown = () => {
     });
 };
 
-setupDropdown();
-
-/* SEARCH BAR */ // (UPDATED JS2 WK2) - Added search bar functionality
-document.querySelector(".searchText").addEventListener("input", (event) => {
-    displayMoviesGrid(movies.filter(movie =>
-        movie.title.toLowerCase().includes(event.target.value.trim().toLowerCase())
-    ));
-});
-
-
-/* MOVIES GRID */ // (UPDATED JS2 WK2) - Updated to handle filtered/searched movies
+/* MOVIES GRID */ 
 const displayMoviesGrid = (searchedMovies = movies) => {
     const cardContainer = document.getElementById('card-container');
     cardContainer.innerHTML = ''; // Clear the current grid
@@ -149,7 +171,6 @@ const displayMoviesGrid = (searchedMovies = movies) => {
 };
 
 /* SCREEN DRAG FUNCTIONS*/
-
 const screenDrag= () => {
     const container = document.getElementById('card-container');
     let isDragging = false;
@@ -400,5 +421,4 @@ const updatePickTimerDisplay = () => {
 };
 
 
-displayMoviesGrid();
-screenDrag();
+fetchMoviesData(); // UPDATED JS3 WK1
