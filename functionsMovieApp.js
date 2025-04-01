@@ -1,6 +1,6 @@
 import { allComments, addCommentToStorage } from "./commentsFunctions.js";
 
-/* FETCH MOVIES */ // UPDATED JS3 WK2
+/* FETCH MOVIES */ // UPDATED JS3 WK2 (switched to async/await)
 let movies = null;
 const fetchMoviesData = async () => {
   try {
