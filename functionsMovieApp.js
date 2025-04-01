@@ -1,5 +1,6 @@
 import { allComments, addCommentToStorage } from './commentsFunctions.js';
 
+
 /* FETCH MOVIES */ // UPDATED JS3 WK1
 let movies = null;
 const fetchMoviesData = () => {
@@ -15,7 +16,10 @@ const fetchMoviesData = () => {
       });
   };
 
+
 /* FILTERS */
+
+
 // Filters movies by genre
 const filterMoviesByGenre = (genre) => {
     const filteredMovies = movies.filter(movie => movie.genres.includes(genre));
