@@ -64,7 +64,6 @@ const displayAllMovies = () => {
 const initializeMoviesFunctions = () => {
   setupGenreFilters();
   displayMoviesGrid();
-  screenDrag();
   setupDropdown();
 
   // Event listeners
@@ -278,7 +277,7 @@ const movieDetailsPanel = () => {
       <form class="comment-form">
     <input type="text" placeholder="Your name" required>
     <textarea placeholder="Your comment" required></textarea>
-    <timerButton type="submit">Post Comment</timerButton>
+    <button type="submit">Post Comment</button>
   </form>
   <div class="comment-display" id="comment-display"></div>`;
 
